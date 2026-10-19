@@ -1,0 +1,23 @@
+{
+  "name": "ctfvault",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hybrid database CTF platform — dynamic scoring and semantic search",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "db:reset": "bash scripts/reset_db.sh",
+    "db:test": "psql -f tests/test_scoring.sql",
+    "test:race": "python3 tests/concurrency_test.py --teams 60 --rounds 10",
+    "bench:leaderboard": "python3 tests/bench_leaderboard.py"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "pg": "^8.13.0",
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.9.0"
+  }
+}
