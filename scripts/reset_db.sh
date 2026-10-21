@@ -16,14 +16,22 @@ for f in db/01_core_schema.sql \
   "${PSQL[@]}" -f "$f"
 done
 
-# Work package B migrations, applied if present.
+# Work package B schema/procedure migrations, applied if present.
 for f in db/1*.sql; do
   [ -e "$f" ] || continue
+  case "$f" in
+    db/14_*) continue ;;
+  esac
   echo "  $f"
   "${PSQL[@]}" -f "$f"
 done
 
 echo "  db/06_seed.sql"
 "${PSQL[@]}" -f db/06_seed.sql
+
+if [ -f db/14_knowledge_seed.sql ]; then
+  echo "  db/14_knowledge_seed.sql"
+  "${PSQL[@]}" -f db/14_knowledge_seed.sql
+fi
 
 echo "Done."

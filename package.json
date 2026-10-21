@@ -10,7 +10,11 @@
     "db:reset": "bash scripts/reset_db.sh",
     "db:test": "psql -f tests/test_scoring.sql",
     "test:race": "python3 tests/concurrency_test.py --teams 60 --rounds 10",
-    "bench:leaderboard": "python3 tests/bench_leaderboard.py"
+    "bench:leaderboard": "python3 tests/bench_leaderboard.py",
+    "embed:service": "uvicorn scripts.embedding_service:app --host 127.0.0.1 --port 8000",
+    "embed:backfill": "python3 scripts/backfill_embeddings.py",
+    "embed:service": "uvicorn scripts.embedding_service:app --host 127.0.0.1 --port 8000",
+    "embed:backfill": "python3 scripts/backfill_embeddings.py"
   },
   "dependencies": {
     "next": "^15.0.0",

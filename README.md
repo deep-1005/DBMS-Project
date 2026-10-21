@@ -64,8 +64,12 @@ psql -d ctfvault -f db/02_core_indexes.sql
 psql -d ctfvault -f db/03_functions_triggers.sql
 psql -d ctfvault -f db/04_procedures.sql
 psql -d ctfvault -f db/05_views.sql
+psql -d ctfvault -f db/10_vector_schema.sql
+psql -d ctfvault -f db/11_vector_indexes.sql
+psql -d ctfvault -f db/12_hint_procedures.sql
+psql -d ctfvault -f db/13_collusion.sql
 psql -d ctfvault -f db/06_seed.sql
-# Work package B adds 10_ .. 14_ here
+psql -d ctfvault -f db/14_knowledge_seed.sql
 ```
 
 Or `npm run db:reset`.
@@ -88,7 +92,22 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-### 4. Verify
+### 4. Embeddings
+
+The semantic search uses the local `all-MiniLM-L6-v2` model (384 dimensions),
+so writeup content is not sent to a third party. Install the optional Python
+dependencies and start the service in a second terminal:
+
+```bash
+python -m pip install -r scripts/requirements-embeddings.txt
+npm run embed:service
+```
+
+The API embeds new writeups transactionally. For imported or interrupted
+writeups, run `npm run embed:backfill`; it only updates chunks whose vector
+is still null and is safe to repeat.
+
+### 5. Verify
 
 ```bash
 npm run db:test            # 17 scoring assertions
@@ -151,8 +170,13 @@ app/
   lib/     db.js, auth.js, flags.js
   api/     submit, leaderboard, challenges, auth   (A)
            search, writeups, hints, admin          (B)
+  search/  semantic search page
+  writeups/ writeup publishing page
+  challenges/[id]/hints/ hint economy page
+  admin/collusion/ collusion review page
 tests/     test_scoring.sql, concurrency_test.py, bench_leaderboard.py
-docs/      WORK_SPLIT.md, BENCHMARKS.md, HANDOVER_SUBHRANSI.md
+docs/      WORK_SPLIT.md, BENCHMARKS.md, HANDOVER_SUBHRANSI.md,
+           KNOWLEDGE_LAYER.md
            ER diagram + relational schema PDFs
 ```
 
