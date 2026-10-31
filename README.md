@@ -85,12 +85,35 @@ openssl rand -hex 32   # -> SESSION_SECRET
 No credential, connection string or signing secret is committed to this
 repository. `.env.local` is gitignored.
 
+Then issue each team its own HMAC-derived flags (the seed only contains the
+fixed hashes used by the SQL test suite):
+
+```bash
+npm run db:flags                 # issue flags for every team
+npm run db:flags -- Segfault     # also print Segfault's flags for a demo
+```
+
 ### 3. Run
 
 ```bash
 npm install
 npm run dev          # http://localhost:3000
 ```
+
+**Demo accounts** (all use the password `demo-password-1`, stored only as a
+bcrypt hash): `admin` (admin), `setter01` (challenge setter), and players
+`deep`, `rhea` (Segfault), `arjun` (NullPointer), `meera` (StackSmashers),
+`kabir` (HeapSpray), `ishaan` (ZeroDay).
+
+| Page | Who | What it shows |
+|---|---|---|
+| `/login` | everyone | sign in |
+| `/challenges` | players | challenge board, category filter, flag submission |
+| `/scoreboard` | everyone | live standings from `mv_leaderboard` |
+| `/writeups` | players | publish and read writeups for solved challenges |
+| `/search` | players | hybrid semantic + full-text writeup search |
+| `/challenges/[id]/hints` | players | buy hints (charged once) |
+| `/admin/collusion` | admin | similarity scan and review queue |
 
 ### 4. Embeddings
 
@@ -167,7 +190,9 @@ Full method and tables in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 ```
 db/        01-06 core (A), 10-14 vector (B)
 app/
-  lib/     db.js, auth.js, flags.js
+  lib/     db.js, auth.js, flags.js, leaderboard.js, embeddings.js
+  components/ Nav.js (shared navigation)
+  login/ challenges/ scoreboard/   pages                 (A)
   api/     submit, leaderboard, challenges, auth   (A)
            search, writeups, hints, admin          (B)
   search/  semantic search page
@@ -175,7 +200,7 @@ app/
   challenges/[id]/hints/ hint economy page
   admin/collusion/ collusion review page
 tests/     test_scoring.sql, concurrency_test.py, bench_leaderboard.py
-docs/      WORK_SPLIT.md, BENCHMARKS.md, HANDOVER_SUBHRANSI.md,
+docs/      WORK_SPLIT.md, BENCHMARKS.md, HANDOVER_SUBHRANSI.md, CTFVault_Project_Report.docx,
            KNOWLEDGE_LAYER.md
            ER diagram + relational schema PDFs
 ```

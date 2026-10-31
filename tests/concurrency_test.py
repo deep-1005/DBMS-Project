@@ -89,7 +89,7 @@ def build_fixture(n_teams: int, round_no: int):
             INSERT INTO users
                 (username, email, password_hash, role, team_id, is_captain)
             VALUES (%s, %s,
-                    '$2b$12$K8pQ3mWnZvX1tL6yRfBuOeH4sJdCgA9iVxTnMrPkEwYzLqNbXuSdG',
+                    '$2b$12$ytcflsVNAB66Kx29DxL3aeL18A3HmY7ICV8Hy8yPZbmXtxsxz9ZDC',
                     'player', %s, TRUE)
             RETURNING user_id
             """,

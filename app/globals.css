@@ -1,0 +1,111 @@
+/*PES1UG24CS144_Deeptha*/
+/* CTFVault — shared styles for every page. Owner: Deeptha Shankar */
+
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1b1f24;
+  --muted: #5d6673;
+  --line: #dde1e6;
+  --accent: #1f5fbf;
+  --accent-ink: #ffffff;
+  --ok: #1d7a46;
+  --ok-bg: #e5f4ea;
+  --bad: #b3261e;
+  --bad-bg: #fbe9e7;
+  --blood: #8f1d1d;
+  --blood-bg: #fde8e8;
+  --nav: #13161b;
+  --nav-ink: #e8ebef;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+main {
+  max-width: 1040px;
+  margin: 2rem auto;
+  padding: 0 1.25rem;
+}
+main.narrow { max-width: 420px; }
+
+h1 { font-size: 1.6rem; margin: 0 0 .4rem; }
+h2 { font-size: 1.1rem; margin: 1rem 0 .3rem; }
+a { color: var(--accent); }
+
+/* ---- top bar ---------------------------------------------------- */
+.topbar { background: var(--nav); color: var(--nav-ink); }
+.topbar-inner {
+  max-width: 1040px; margin: 0 auto; padding: .7rem 1.25rem;
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.topbar a { color: var(--nav-ink); text-decoration: none; }
+.brand { font-weight: 700; letter-spacing: .02em; font-size: 1.05rem; }
+.links { display: flex; gap: 1.1rem; flex: 1; flex-wrap: wrap; }
+.links a { opacity: .75; }
+.links a:hover, .links a.active { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
+.session { display: flex; align-items: center; gap: .8rem; }
+.who { display: flex; align-items: center; gap: .45rem; }
+.role, .team {
+  font-size: .72rem; padding: .1rem .45rem; border-radius: 999px;
+  border: 1px solid #3a414b;
+}
+.role-admin { border-color: #c98b2b; color: #f3c77d; }
+.role-setter { border-color: #4f8fd6; color: #9cc3ee; }
+
+/* ---- forms ------------------------------------------------------ */
+input, select, textarea {
+  font: inherit; padding: .45rem .6rem; border: 1px solid var(--line);
+  border-radius: 6px; background: var(--surface); color: var(--text);
+}
+textarea { resize: vertical; }
+button {
+  font: inherit; padding: .45rem .9rem; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+}
+button:disabled { opacity: .6; cursor: default; }
+button.ghost { background: transparent; color: var(--nav-ink); border-color: #3a414b; }
+form.stack, .stack { display: grid; gap: .8rem; margin-top: 1rem; }
+label { display: grid; gap: .3rem; font-weight: 500; }
+label.inline { display: flex; align-items: center; gap: .5rem; font-weight: 400; }
+
+/* ---- tables ----------------------------------------------------- */
+table {
+  width: 100%; border-collapse: collapse; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-top: 1rem;
+}
+th, td { text-align: left; padding: .6rem .75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.mine td { background: #eef4fd; }
+tr:last-child td { border-bottom: 0; }
+
+/* ---- bits ------------------------------------------------------- */
+.muted { color: var(--muted); }
+.sub { font-size: .85rem; margin-top: .15rem; }
+.page-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.tag { font-size: .8rem; padding: .1rem .5rem; border-radius: 4px; background: #eceff3; }
+.pill { font-size: .8rem; padding: .15rem .6rem; border-radius: 999px; font-weight: 600; }
+.pill.solved { background: var(--ok-bg); color: var(--ok); }
+.pill.locked { background: #eceff3; color: var(--muted); }
+.you { margin-left: .5rem; font-size: .75rem; color: var(--accent); }
+.flag-form { display: flex; gap: .4rem; }
+.flag-form input { width: 15rem; font-family: ui-monospace, Consolas, monospace; }
+.result { margin-top: .35rem; font-size: .88rem; font-weight: 600; }
+.result.ok { color: var(--ok); }
+.result.bad { color: var(--bad); }
+.result.blood { color: var(--blood); }
+.error { color: var(--bad); }
+
+article {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 8px; padding: .9rem 1.1rem !important; margin-top: .9rem;
+}
+article h2 { margin-top: 0; }
+[role="status"]:empty, [role="alert"]:empty { display: none; }

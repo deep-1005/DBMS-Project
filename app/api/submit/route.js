@@ -16,6 +16,7 @@
 import { query, withTransaction } from '../../lib/db.js';
 import { requireRole } from '../../lib/auth.js';
 import { hashFlag } from '../../lib/flags.js';
+import { queueLeaderboardRefresh } from '../../lib/leaderboard.js';
 
 const MAX_WRONG_PER_MINUTE = 10;
 
@@ -95,28 +96,4 @@ export async function POST(request) {
     console.error('[submit] unexpected error', err);
     return Response.json({ error: 'Submission failed.' }, { status: 500 });
   }
-}
-
-/**
- * Debounced refresh. Many solves can land in a burst at the start of an
- * event; refreshing once per burst keeps the view fresh without running a
- * full re-aggregation per submission.
- */
-let refreshTimer = null;
-let refreshInFlight = false;
-
-function queueLeaderboardRefresh() {
-  if (refreshTimer) return;
-  refreshTimer = setTimeout(async () => {
-    refreshTimer = null;
-    if (refreshInFlight) return;
-    refreshInFlight = true;
-    try {
-      await query('REFRESH MATERIALIZED VIEW CONCURRENTLY mv_leaderboard');
-    } catch (err) {
-      console.error('[submit] leaderboard refresh failed', err);
-    } finally {
-      refreshInFlight = false;
-    }
-  }, 2000);
 }

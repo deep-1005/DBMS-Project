@@ -1,5 +1,6 @@
 import { query, withTransaction } from '../../lib/db.js';
 import { requireRole } from '../../lib/auth.js';
+import { queueLeaderboardRefresh } from '../../lib/leaderboard.js';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +39,8 @@ export async function POST(request) {
     await withTransaction(user.userId, async (client) => {
       await client.query('CALL sp_unlock_hint($1, $2)', [user.teamId, hintId]);
     });
+    // The purchase wrote a hint_penalty row to score_ledger.
+    queueLeaderboardRefresh();
     return Response.json({ unlocked: true });
   } catch (error) {
     if (error?.code === '23503') return Response.json({ error: error.message }, { status: 404 });
