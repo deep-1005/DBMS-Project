@@ -34,7 +34,7 @@ what rubric item 15 asks commits to demonstrate.
 
 ## Rubric coverage by owner
 
-| # | Requirement | A (Deep) | B (Subhransi) |
+| # | Requirement | A (Deeptha) | B (Subhransi) |
 |---|---|---|---|
 | 3 | Two paradigms | PostgreSQL relational core | pgvector extension |
 | 4 | ER diagram + relational schema | Core entities | Vector entities |
@@ -57,7 +57,7 @@ what rubric item 15 asks commits to demonstrate.
 
 Three weeks, assuming the ER model and schema (already done) are week 0.
 
-| Week | A (Deep) | B (Subhransi) |
+| Week | A (Deeptha) | B (Subhransi) |
 |---|---|---|
 | 1 | ✅ schema, triggers, procedures, views, tests | pgvector install, `10`–`11` schema, embedding service stub |
 | 2 | auth, submit/leaderboard/challenge routes, concurrency proof, benchmark | chunking pipeline, backfill script, vector search route |
