@@ -4,8 +4,8 @@
 
 | | Member | Vertical slice |
 |---|---|---|
-| **A** | Deeptha Shankar (PES1UG24CS144) | **Scoring & Integrity Core** — relational schema, transactions, triggers, stored procedures, materialised leaderboard, authentication, submission & scoreboard UI |
-| **B** | Subhransi | **Knowledge & Retrieval Layer** — pgvector schema, embedding pipeline, chunking, hybrid search, collusion detection, hints economy, writeup & admin UI |
+| **A** | Deeptha S (PES1UG24CS144) | **Scoring & Integrity Core** — relational schema, transactions, triggers, stored procedures, materialised leaderboard, authentication, submission & scoreboard UI |
+| **B** | Epari Subhransi (PES1UG24CS161) | **Knowledge & Retrieval Layer** — pgvector schema, embedding pipeline, chunking, hybrid search, collusion detection, hints economy, writeup & admin UI |
 
 Rubric item 2 requires that *each member contributes to both database and
 application development*. The split is therefore **vertical, not
