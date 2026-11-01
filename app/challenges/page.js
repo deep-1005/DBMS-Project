@@ -7,6 +7,9 @@
  *
  * Points shown are live: each correct submission lowers a challenge's value
  * (fn_challenge_points), and the trigger adjusts earlier solvers too.
+ *
+ * Only players compete. Admins and setters run the event, so the flag box
+ * and hints are hidden for them (the API enforces the same rule).
  */
 
 import Link from 'next/link';
@@ -18,6 +21,15 @@ export default function ChallengesPage() {
   const [category, setCategory] = useState('');
   const [flags, setFlags] = useState({});
   const [results, setResults] = useState({});
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/auth/me', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((payload) => setRole(payload.user?.role ?? null));
+  }, []);
+
+  const isPlayer = role === 'player';
 
   const load = useCallback(async () => {
     const qs = category ? `?category=${encodeURIComponent(category)}` : '';
@@ -70,7 +82,8 @@ export default function ChallengesPage() {
         <thead>
           <tr>
             <th>Challenge</th><th>Category</th><th className="num">Points</th>
-            <th className="num">Solves</th><th>First blood</th><th>Submit flag</th>
+            <th className="num">Solves</th><th>First blood</th>
+            {isPlayer && <th>Submit flag</th>}
           </tr>
         </thead>
         <tbody>
@@ -78,32 +91,37 @@ export default function ChallengesPage() {
             <tr key={c.challenge_id}>
               <td>
                 <strong>{c.title}</strong>
-                <div className="sub">
-                  <Link href={`/challenges/${c.challenge_id}/hints`}>Hints</Link>
-                </div>
+                {c.description && <div className="sub muted">{c.description}</div>}
+                {isPlayer && (
+                  <div className="sub">
+                    <Link href={`/challenges/${c.challenge_id}/hints`}>Hints</Link>
+                  </div>
+                )}
               </td>
               <td><span className="tag">{c.category}</span></td>
               <td className="num">{c.current_points}</td>
               <td className="num">{c.solve_count}</td>
               <td>{c.first_blood_team ?? <span className="muted">—</span>}</td>
-              <td>
-                {c.solved_by_my_team ? (
-                  <span className="pill solved">Solved</span>
-                ) : c.is_locked ? (
-                  <span className="pill locked">Locked</span>
-                ) : (
-                  <form className="flag-form" onSubmit={(e) => submit(e, c.challenge_id)}>
-                    <input placeholder="pes{…}" value={flags[c.challenge_id] ?? ''}
-                      onChange={(e) => setFlags({ ...flags, [c.challenge_id]: e.target.value })} />
-                    <button type="submit">Submit</button>
-                  </form>
-                )}
-                {results[c.challenge_id] && (
-                  <div className={`result ${results[c.challenge_id].kind}`}>
-                    {results[c.challenge_id].text}
-                  </div>
-                )}
-              </td>
+              {isPlayer && (
+                <td>
+                  {c.solved_by_my_team ? (
+                    <span className="pill solved">Solved</span>
+                  ) : c.is_locked ? (
+                    <span className="pill locked">Locked</span>
+                  ) : (
+                    <form className="flag-form" onSubmit={(e) => submit(e, c.challenge_id)}>
+                      <input placeholder="pes{…}" value={flags[c.challenge_id] ?? ''}
+                        onChange={(e) => setFlags({ ...flags, [c.challenge_id]: e.target.value })} />
+                      <button type="submit">Submit</button>
+                    </form>
+                  )}
+                  {results[c.challenge_id] && (
+                    <div className={`result ${results[c.challenge_id].kind}`}>
+                      {results[c.challenge_id].text}
+                    </div>
+                  )}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
