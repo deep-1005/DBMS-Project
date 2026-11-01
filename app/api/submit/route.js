@@ -14,14 +14,14 @@
  */
 
 import { query, withTransaction } from '../../lib/db.js';
-import { requireRole } from '../../lib/auth.js';
+import { requireExactRole } from '../../lib/auth.js';
 import { hashFlag } from '../../lib/flags.js';
 import { queueLeaderboardRefresh } from '../../lib/leaderboard.js';
 
 const MAX_WRONG_PER_MINUTE = 10;
 
 export async function POST(request) {
-  const user = await requireRole('player');
+  const user = await requireExactRole('player');
   if (user instanceof Response) return user;
 
   // ---- input validation -------------------------------------------

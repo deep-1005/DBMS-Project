@@ -1,5 +1,5 @@
 import { query, withTransaction } from '../../lib/db.js';
-import { requireRole } from '../../lib/auth.js';
+import { requireRole, requireExactRole } from '../../lib/auth.js';
 import { chunkText, embedTexts, pgVector } from '../../lib/embeddings.js';
 
 export const dynamic = 'force-dynamic';
@@ -27,7 +27,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const user = await requireRole('player');
+  const user = await requireExactRole('player');
   if (user instanceof Response) return user;
   let body;
   try { body = await request.json(); } catch {

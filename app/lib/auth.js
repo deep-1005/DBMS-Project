@@ -132,3 +132,23 @@ export async function requireRole(required = 'player') {
   }
   return user;
 }
+
+/**
+ * Exact-role guard: unlike requireRole, the hierarchy does NOT apply.
+ * Used on routes that take part in the competition (submitting flags,
+ * unlocking hints, publishing writeups), so the people who run the event
+ * (admin, setter) cannot also play it — separation of duties.
+ */
+export async function requireExactRole(required) {
+  const user = await currentUser();
+  if (!user) {
+    return Response.json({ error: 'Not signed in.' }, { status: 401 });
+  }
+  if (user.role !== required) {
+    return Response.json(
+      { error: `Only the ${required} role can do this.` },
+      { status: 403 }
+    );
+  }
+  return user;
+}

@@ -1,11 +1,11 @@
 import { query, withTransaction } from '../../lib/db.js';
-import { requireRole } from '../../lib/auth.js';
+import { requireExactRole } from '../../lib/auth.js';
 import { queueLeaderboardRefresh } from '../../lib/leaderboard.js';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
-  const user = await requireRole('player');
+  const user = await requireExactRole('player');
   if (user instanceof Response) return user;
   const challengeId = Number(new URL(request.url).searchParams.get('challengeId'));
   if (!Number.isInteger(challengeId) || challengeId <= 0) {
@@ -25,7 +25,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const user = await requireRole('player');
+  const user = await requireExactRole('player');
   if (user instanceof Response) return user;
   let body;
   try { body = await request.json(); } catch {
