@@ -1,14 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 export default function HintsPage({ params }) {
+  // Next.js 15: params is a Promise, so unwrap it before reading properties.
+  const { id } = use(params);
+
   const [hints, setHints] = useState([]);
   const [message, setMessage] = useState('');
+
   useEffect(() => {
-    fetch(`/api/hints?challengeId=${params.id}`).then((r) => r.json())
+    fetch(`/api/hints?challengeId=${id}`).then((r) => r.json())
       .then((payload) => setHints(payload.hints ?? []));
-  }, [params.id]);
+  }, [id]);
+
   async function unlock(hintId) {
     const response = await fetch('/api/hints', {
       method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ hintId }),
@@ -17,6 +22,7 @@ export default function HintsPage({ params }) {
     setMessage(response.ok ? 'Hint unlocked; points deducted once.' : payload.error);
     if (response.ok) window.location.reload();
   }
+
   return (
     <main style={{ maxWidth: 900, margin: '2rem auto', fontFamily: 'system-ui' }}>
       <h1>Challenge hints</h1><p role="status">{message}</p>
