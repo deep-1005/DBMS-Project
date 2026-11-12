@@ -2,12 +2,11 @@
 
 **A Hybrid Database Platform for Dynamic CTF Scoring and Semantic Search**
 
-DBMS Experiential Learning — Level 3 Project
-PES University · Faculty: Dr. Nagasundari S
+DBMS Experiential Learning 
 
 | Member | Slice |
 |---|---|
-| Deeptha Shankar (PES1UG24CS144) | Scoring & Integrity Core |
+| Deeptha S (PES1UG24CS144) | Scoring & Integrity Core |
 | Epari Subhransi (PES1UG24CS161) | Knowledge & Retrieval Layer |
 
 ---
