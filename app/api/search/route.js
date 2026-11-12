@@ -16,11 +16,15 @@ export async function GET(request) {
   }
   const { rows } = await query(
     `WITH eligible AS (
-       SELECT DISTINCT w.writeup_id
+       -- Players only see writeups for challenges their team has solved.
+       -- Admins and setters are not on a team and may search every writeup.
+       SELECT w.writeup_id
          FROM writeups w
-         JOIN submissions s ON s.challenge_id = w.challenge_id
-                            AND s.team_id = $2 AND s.is_correct
         WHERE w.published
+          AND ($4::BOOLEAN OR EXISTS (
+                SELECT 1 FROM submissions s
+                 WHERE s.challenge_id = w.challenge_id
+                   AND s.team_id = $2 AND s.is_correct))
      ), ranked_chunks AS (
        SELECT wc.writeup_id,
               ROW_NUMBER() OVER (ORDER BY wc.embedding <=> $1::vector) AS rank
@@ -54,7 +58,7 @@ export async function GET(request) {
        JOIN teams t USING (team_id)
       ORDER BY f.score DESC, f.writeup_id
       LIMIT 10`,
-    [pgVector(vector), user.teamId, text]
+    [pgVector(vector), user.teamId, text, user.role !== 'player']
   );
   return Response.json({ query: text, results: rows });
 }

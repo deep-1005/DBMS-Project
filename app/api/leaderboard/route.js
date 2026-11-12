@@ -19,10 +19,12 @@ export async function GET(request) {
   const user = await currentUser();
 
   const { rows } = await query(
-    `SELECT rank, team_id, team_name, total_points,
-            solves, first_bloods, last_award_at
-       FROM mv_leaderboard
-      ORDER BY rank, team_id
+    `SELECT m.rank, m.team_id, m.team_name, m.total_points,
+            m.solves, m.first_bloods,
+            (SELECT MAX(s.submitted_at) FROM submissions s
+              WHERE s.team_id = m.team_id AND s.is_correct) AS last_solve_at
+       FROM mv_leaderboard m
+      ORDER BY m.rank, m.team_id
       LIMIT $1 OFFSET $2`,
     [limit, offset]
   );

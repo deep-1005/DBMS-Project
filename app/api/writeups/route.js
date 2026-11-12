@@ -16,12 +16,12 @@ export async function GET(request) {
        JOIN challenges c ON c.challenge_id = w.challenge_id
       WHERE w.published
         AND ($1::INTEGER IS NULL OR w.challenge_id = $1)
-        AND EXISTS (
+        AND ($3::BOOLEAN OR EXISTS (
           SELECT 1 FROM submissions s
            WHERE s.challenge_id = w.challenge_id
-             AND s.team_id = $2 AND s.is_correct)
+             AND s.team_id = $2 AND s.is_correct))
       ORDER BY w.created_at DESC`,
-    [challengeId ? Number(challengeId) : null, user.teamId]
+    [challengeId ? Number(challengeId) : null, user.teamId, user.role !== 'player']
   );
   return Response.json({ writeups: rows });
 }

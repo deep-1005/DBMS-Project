@@ -31,7 +31,13 @@ export async function GET(request) {
                WHERE s.challenge_id = b.challenge_id
                  AND s.user_id = $2
                  AND s.is_correct
-            ) AS solved_by_me
+            ) AS solved_by_me,
+            (SELECT u.username FROM submissions s
+               JOIN users u ON u.user_id = s.user_id
+              WHERE s.challenge_id = b.challenge_id
+                AND s.team_id = $1
+                AND s.is_correct
+              LIMIT 1) AS team_solver
        FROM v_challenge_board b
       WHERE ($3::TEXT IS NULL OR b.category = $3)
       ORDER BY b.category, b.current_points DESC`,

@@ -36,9 +36,11 @@ export default function Nav() {
     router.push('/login');
   }
 
-  const links = user?.role === 'admin'
-    ? [...LINKS, { href: '/admin/collusion', label: 'Collusion review' }]
-    : LINKS;
+  let links = LINKS;
+  if (user?.role === 'player') links = [...LINKS, { href: '/team', label: 'My team' }];
+  if (user?.role === 'admin') {
+    links = [...LINKS, { href: '/admin/collusion', label: 'Collusion review' }];
+  }
 
   return (
     <header className="topbar">

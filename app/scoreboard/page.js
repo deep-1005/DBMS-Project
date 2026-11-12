@@ -40,7 +40,7 @@ export default function ScoreboardPage() {
           <tr>
             <th className="num">Rank</th><th>Team</th><th className="num">Points</th>
             <th className="num">Solves</th><th className="num">First bloods</th>
-            <th>Last scored</th>
+            <th>Last solve</th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +51,9 @@ export default function ScoreboardPage() {
               <td className="num">{s.total_points}</td>
               <td className="num">{s.solves}</td>
               <td className="num">{s.first_bloods}</td>
-              <td>{s.last_award_at ? new Date(s.last_award_at).toLocaleTimeString() : '—'}</td>
+              <td>{s.last_solve_at ? new Date(s.last_solve_at).toLocaleString([], {
+                day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit',
+              }) : '—'}</td>
             </tr>
           ))}
         </tbody>

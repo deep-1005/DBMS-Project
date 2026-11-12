@@ -9,7 +9,7 @@
     "start": "next start",
     "db:reset": "bash scripts/reset_db.sh",
     "db:flags": "node --env-file=.env.local scripts/issue_flags.mjs",
-    "db:demo": "node --env-file=.env.local scripts/seed_demo.mjs",
+    "db:demo": "node --env-file=.env.local scripts/seed_demo.mjs && psql -q -f db/08_demo_timeline.sql",
     "db:test": "psql -f tests/test_scoring.sql",
     "test:race": "python3 tests/concurrency_test.py --teams 60 --rounds 10",
     "bench:leaderboard": "python3 tests/bench_leaderboard.py",

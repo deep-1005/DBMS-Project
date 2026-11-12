@@ -1,6 +1,39 @@
+//PES1UG24CS144_Deeptha
+'use client';
+
+/**
+ * Home page. Reads the session so it greets the signed-in user and only
+ * lists what that role can actually use.
+ * Owner: Deeptha Shankar
+ */
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const [user, setUser] = useState(undefined);
+
+  useEffect(() => {
+    fetch('/api/auth/me', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((p) => setUser(p.user))
+      .catch(() => setUser(null));
+  }, []);
+
+  const rows = [
+    ['/challenges', 'Challenges', 'Browse challenges, filter by category and submit flags.'],
+    ['/scoreboard', 'Scoreboard', 'Live standings with dynamic point decay and first bloods.'],
+    ['/writeups', 'Writeups', 'Publish how your team solved a challenge.'],
+    ['/search', 'Search', 'Find writeups by technique and meaning, not only exact words.'],
+  ];
+  if (user?.role === 'player') {
+    rows.push(['/team', 'My team', 'See your teammates and what each of you has solved.']);
+  }
+  if (user?.role === 'admin') {
+    rows.push(['/admin/collusion', 'Collusion review',
+      'Review suspiciously similar writeups across teams.']);
+  }
+
   return (
     <main>
       <h1>CTFVault</h1>
@@ -10,19 +43,22 @@ export default function Home() {
       </p>
       <table>
         <tbody>
-          <tr><td><Link href="/challenges">Challenges</Link></td>
-            <td>Browse challenges, filter by category and submit flags.</td></tr>
-          <tr><td><Link href="/scoreboard">Scoreboard</Link></td>
-            <td>Live standings with dynamic point decay and first bloods.</td></tr>
-          <tr><td><Link href="/writeups">Writeups</Link></td>
-            <td>Publish how your team solved a challenge.</td></tr>
-          <tr><td><Link href="/search">Search</Link></td>
-            <td>Find writeups by technique and meaning, not only exact words.</td></tr>
-          <tr><td><Link href="/admin/collusion">Collusion review</Link></td>
-            <td>Admins review suspiciously similar writeups across teams.</td></tr>
+          {rows.map(([href, label, text]) => (
+            <tr key={href}>
+              <td><Link href={href}>{label}</Link></td>
+              <td>{text}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <p style={{ marginTop: '1.5rem' }}><Link href="/login">Sign in</Link> to take part.</p>
+      <p style={{ marginTop: '1.5rem' }}>
+        {user ? (
+          <>Signed in as <strong>{user.username}</strong> ({user.role}
+            {user.team_name ? `, team ${user.team_name}` : ''}).</>
+        ) : user === null ? (
+          <><Link href="/login">Sign in</Link> to take part.</>
+        ) : null}
+      </p>
     </main>
   );
 }

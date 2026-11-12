@@ -115,6 +115,12 @@ the flags of the challenges team Segfault has not solved yet, ready for a
 live submission; "QR Quest" is left unsolved by everyone so a first blood
 can be shown.
 
+The run takes about a second, so `db/08_demo_timeline.sql` then re-times the
+history: it spreads the submissions evenly over the previous six hours so the
+scoreboard's "Last solve" column and the team page show realistic times.
+Only timestamps change; points and ranks are untouched. `db:demo` runs it
+for you and needs `psql` on the PATH.
+
 If the embedding service is not running, the writeups are stored without
 vectors; start it and run `npm run embed:backfill`, then press "Run
 similarity scan" on the admin page.
