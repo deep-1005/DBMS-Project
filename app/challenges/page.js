@@ -1,3 +1,4 @@
+
 //PES1UG24CS144_Deeptha
 'use client';
 
@@ -104,8 +105,10 @@ export default function ChallengesPage() {
               <td>{c.first_blood_team ?? <span className="muted">—</span>}</td>
               {isPlayer && (
                 <td>
-                  {c.solved_by_my_team ? (
-                    <span className="pill solved">Solved</span>
+                  {c.solved_by_me ? (
+                    <span className="pill solved">Solved by you</span>
+                  ) : c.solved_by_my_team ? (
+                    <span className="pill solved">Solved by your team</span>
                   ) : c.is_locked ? (
                     <span className="pill locked">Locked</span>
                   ) : (
