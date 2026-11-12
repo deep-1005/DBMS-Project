@@ -8,7 +8,7 @@ PES University · Faculty: Dr. Nagasundari S
 | Member | Slice |
 |---|---|
 | Deeptha Shankar (PES1UG24CS144) | Scoring & Integrity Core |
-| Subhransi | Knowledge & Retrieval Layer |
+| Epari Subhransi (PES1UG24CS161) | Knowledge & Retrieval Layer |
 
 ---
 
@@ -93,6 +93,35 @@ npm run db:flags                 # issue flags for every team
 npm run db:flags -- Segfault     # also print Segfault's flags for a demo
 ```
 
+### 2a. Extended demo dataset (optional, recommended for the demo)
+
+The small seed has 5 challenges and 5 teams and is what the SQL tests run
+against. For a demonstration, load the larger dataset and let the script
+play a whole event:
+
+```bash
+npm run embed:service    # in a second terminal first (see step 4)
+npm run db:reset
+npm run db:demo
+```
+
+`db:demo` applies `db/07_demo_dataset.sql` (24 challenges in 6 categories,
+12 teams, 27 users, 46 hints), issues every team's flags, and then plays
+243 submissions, 25 hint purchases and 40 writeups. Nothing is written to
+the score ledger directly: every solve goes through `fn_submit_flag`, so
+first blood, decay and retroactive adjustments are computed by the
+triggers. The run is deterministic. It ends by printing the scoreboard and
+the flags of the challenges team Segfault has not solved yet, ready for a
+live submission; "QR Quest" is left unsolved by everyone so a first blood
+can be shown.
+
+If the embedding service is not running, the writeups are stored without
+vectors; start it and run `npm run embed:backfill`, then press "Run
+similarity scan" on the admin page.
+
+`db:demo` replaces `db:flags`; do not run both. Run `npm run db:test`
+before `db:demo`, not after: the test suite needs the small seed.
+
 ### 3. Run
 
 ```bash
@@ -103,7 +132,8 @@ npm run dev          # http://localhost:3000
 **Demo accounts** (all use the password `demo-password-1`, stored only as a
 bcrypt hash): `admin` (admin), `setter01` (challenge setter), and players
 `deep`, `rhea` (Segfault), `arjun` (NullPointer), `meera` (StackSmashers),
-`kabir` (HeapSpray), `ishaan` (ZeroDay).
+`kabir` (HeapSpray), `ishaan` (ZeroDay). The extended dataset adds
+`setter02` and 18 more players across 12 teams (see `db/07_demo_dataset.sql`).
 
 | Page | Who | What it shows |
 |---|---|---|
@@ -142,7 +172,7 @@ npm run bench:leaderboard  # materialised view benchmark
 
 ## Why two database paradigms
 
-Rubric item 18 asks the choice to be justified by the data, not included
+Requirement 17 asks the choice to be justified by the data, not included
 for demonstration. The justification is specific:
 
 - **Relational, for competition state.** Awarding first blood to exactly
@@ -188,7 +218,8 @@ Full method and tables in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 ## Repository layout
 
 ```
-db/        01-06 core (A), 10-14 vector (B)
+db/        01-06 core (A), 07 extended demo dataset + demo_writeups.json (A),
+           10-14 vector (B)
 app/
   lib/     db.js, auth.js, flags.js, leaderboard.js, embeddings.js
   components/ Nav.js (shared navigation)

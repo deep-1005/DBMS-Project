@@ -18,6 +18,8 @@ export async function GET(request) {
   const { rows } = await query(
     `SELECT b.challenge_id, b.title, b.category, b.current_points,
             b.solve_count, b.is_locked, b.first_blood_team, b.solve_rate_pct,
+            (SELECT c.description FROM challenges c
+              WHERE c.challenge_id = b.challenge_id) AS description,
             EXISTS (
               SELECT 1 FROM submissions s
                WHERE s.challenge_id = b.challenge_id

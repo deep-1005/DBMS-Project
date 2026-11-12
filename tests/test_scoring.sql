@@ -17,6 +17,19 @@
 \set ON_ERROR_STOP on
 \pset format aligned
 
+-- These tests assume the small seed with no submissions. They refuse to
+-- run on a database that has already been played (for example after
+-- `npm run db:demo`), instead of failing halfway with a confusing message.
+DO $$
+BEGIN
+    IF (SELECT COUNT(*) FROM submissions) > 0
+       OR (SELECT COUNT(*) FROM challenges) <> 5 THEN
+        RAISE EXCEPTION
+            'test_scoring.sql needs a fresh database: run "npm run db:reset" first.';
+    END IF;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION test_flag(p_ch INTEGER, p_team INTEGER)
 RETURNS CHAR(64) LANGUAGE sql IMMUTABLE AS $$
     SELECT encode(sha256((p_ch::TEXT || ':' || p_team::TEXT
