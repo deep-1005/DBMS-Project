@@ -23,11 +23,17 @@ export async function GET(request) {
                WHERE s.challenge_id = b.challenge_id
                  AND s.team_id = $1
                  AND s.is_correct
-            ) AS solved_by_my_team
+            ) AS solved_by_my_team,
+            EXISTS (
+              SELECT 1 FROM submissions s
+               WHERE s.challenge_id = b.challenge_id
+                 AND s.user_id = $2
+                 AND s.is_correct
+            ) AS solved_by_me
        FROM v_challenge_board b
-      WHERE ($2::TEXT IS NULL OR b.category = $2)
+      WHERE ($3::TEXT IS NULL OR b.category = $3)
       ORDER BY b.category, b.current_points DESC`,
-    [user?.teamId ?? null, category]
+    [user?.teamId ?? null, user?.userId ?? null, category]
   );
 
   return Response.json({ challenges: rows });
