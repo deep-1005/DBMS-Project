@@ -109,3 +109,84 @@ article {
 }
 article h2 { margin-top: 0; }
 [role="status"]:empty, [role="alert"]:empty { display: none; }
+
+
+/* Collusion review action buttons */
+button.collusion-confirm {
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid var(--accent);
+}
+button.collusion-confirm:hover {
+  filter: brightness(0.9);
+}
+button.collusion-dismiss {
+  background: #ffffff;
+  color: #b3261e;
+  border: 1px solid #b3261e;
+}
+button.collusion-dismiss:hover {
+  background: #fbe9e7;
+}
+button.collusion-confirm:disabled,
+button.collusion-dismiss:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Collusion review tabs */
+button.collusion-tab {
+  background: #ffffff;
+  color: #1b1f24;
+  border: 1px solid #9ca3af;
+}
+
+button.collusion-tab:hover {
+  background: #eef2f7;
+  color: #1b1f24;
+}
+
+button.collusion-tab.active {
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid var(--accent);
+}
+
+/* Refined Collusion Review tabs */
+button.collusion-tab {
+  background: #eef2f8;
+  color: #475569;
+  border: 1px solid #e0e6ef;
+  border-radius: 10px;
+  padding: 10px 19px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+}
+
+button.collusion-tab:hover {
+  background: #e2eaf6;
+  color: #1e40af;
+  border-color: #c5d5ed;
+  transform: translateY(-1px);
+}
+
+button.collusion-tab.active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: 1px solid #1d4ed8;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.23);
+}
+
+button.collusion-tab.active:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+button.collusion-tab:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.3);
+  outline-offset: 3px;
+}

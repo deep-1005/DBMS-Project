@@ -12,6 +12,7 @@ BEGIN
      WHERE a.embedding IS NOT NULL
        AND b.embedding IS NOT NULL
        AND wa.team_id <> wb.team_id
+       AND wa.challenge_id = wb.challenge_id
        AND a.embedding <=> b.embedding < p_threshold
      GROUP BY a.writeup_id, b.writeup_id
     ON CONFLICT (writeup_a_id, writeup_b_id) DO UPDATE
