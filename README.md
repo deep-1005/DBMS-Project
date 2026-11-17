@@ -92,7 +92,7 @@ npm run db:flags                 # issue flags for every team
 npm run db:flags -- Segfault     # also print Segfault's flags for a demo
 ```
 
-### 2a. Extended demo dataset (optional, recommended for the demo)
+### 2a. Extended demo dataset
 
 The small seed has 5 challenges and 5 teams and is what the SQL tests run
 against. For a demonstration, load the larger dataset and let the script
